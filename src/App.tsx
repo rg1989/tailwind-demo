@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom'
 import { Buttons } from './components/Buttons'
 import { Cards } from './components/Cards'
 import { Forms } from './components/Forms'
@@ -11,6 +12,7 @@ import { Navigation } from './components/Navigation'
 import { Modals } from './components/Modals'
 import { Typography } from './components/Typography'
 import { Misc } from './components/Misc'
+import { Setup } from './components/Setup'
 
 const sections = [
   { id: 'buttons', label: 'Buttons' },
@@ -28,7 +30,7 @@ const sections = [
   { id: 'misc', label: 'Miscellaneous' },
 ]
 
-export default function App() {
+function Layout() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 font-outfit">
       {/* Decorative Background */}
@@ -47,18 +49,49 @@ export default function App() {
         </div>
         
         <nav className="px-4 pb-6">
+          {/* Setup Section */}
+          <p className="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
+            Getting Started
+          </p>
+          <ul className="space-y-1 mb-6">
+            <li>
+              <NavLink
+                to="/setup"
+                className={({ isActive }) =>
+                  `flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm ${
+                    isActive
+                      ? 'bg-indigo-600/20 text-indigo-400 font-medium'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  }`
+                }
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Setup Guide
+              </NavLink>
+            </li>
+          </ul>
+
+          {/* Components Section */}
           <p className="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
             Components
           </p>
           <ul className="space-y-1">
             {sections.map((section) => (
               <li key={section.id}>
-                <a
-                  href={`#${section.id}`}
-                  className="block px-3 py-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors text-sm"
+                <NavLink
+                  to={`/${section.id}`}
+                  className={({ isActive }) =>
+                    `block px-3 py-2 rounded-lg transition-colors text-sm ${
+                      isActive
+                        ? 'bg-indigo-600/20 text-indigo-400 font-medium'
+                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    }`
+                  }
                 >
                   {section.label}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -66,9 +99,8 @@ export default function App() {
 
         <div className="p-4 mx-4 mb-6 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-500/20 rounded-xl">
           <p className="text-sm text-slate-300 mb-2">
-            <strong className="text-white">Pro tip:</strong> Open the source files in your IDE to copy component code.
+            <strong className="text-white">Pro tip:</strong> Click "View Code" on any component to see the code and copy it.
           </p>
-          <code className="text-xs text-indigo-400 font-mono">src/components/</code>
         </div>
       </aside>
 
@@ -87,27 +119,30 @@ export default function App() {
           </div>
         </header>
 
-        {/* Component Sections */}
-        <div className="max-w-5xl mx-auto px-8 py-12 space-y-24">
-          <Buttons />
-          <Cards />
-          <Forms />
-          <Alerts />
-          <Badges />
-          <Avatars />
-          <Tables />
-          <Lists />
-          <Loading />
-          <Navigation />
-          <Modals />
-          <Typography />
-          <Misc />
+        {/* Routes */}
+        <div className="max-w-5xl mx-auto px-8 py-12">
+          <Routes>
+            <Route path="/" element={<Navigate to="/setup" replace />} />
+            <Route path="/setup" element={<Setup />} />
+            <Route path="/buttons" element={<Buttons />} />
+            <Route path="/cards" element={<Cards />} />
+            <Route path="/forms" element={<Forms />} />
+            <Route path="/alerts" element={<Alerts />} />
+            <Route path="/badges" element={<Badges />} />
+            <Route path="/avatars" element={<Avatars />} />
+            <Route path="/tables" element={<Tables />} />
+            <Route path="/lists" element={<Lists />} />
+            <Route path="/loading" element={<Loading />} />
+            <Route path="/navigation" element={<Navigation />} />
+            <Route path="/modals" element={<Modals />} />
+            <Route path="/typography" element={<Typography />} />
+            <Route path="/misc" element={<Misc />} />
+          </Routes>
 
           {/* Footer */}
-          <footer className="text-center py-12 border-t border-white/5">
+          <footer className="text-center py-12 mt-12 border-t border-white/5">
             <p className="text-slate-500 text-sm">
-              Built for quick interview assignments • 
-              <span className="text-slate-400 ml-1">Open source files in <code className="text-indigo-400">src/components/</code> to copy code</span>
+              Built for quick interview assignments
             </p>
           </footer>
         </div>
@@ -116,3 +151,10 @@ export default function App() {
   )
 }
 
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
+  )
+}
